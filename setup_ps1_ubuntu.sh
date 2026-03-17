@@ -74,7 +74,7 @@ apply_ps1() {
     # Colors: usuari i host en verd brillant, icona en taronja (ANSI 202),
     # directori en blau brillant; coincideix amb el tema per defecte d'Ubuntu.
     local ps1_value
-    ps1_value='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[00m\]\[\033[38;5;202m\]'"${ubuntu_icon}"'\[\033[00m\]\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    ps1_value='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[00m\]\[\033[38;5;202m\] '"${ubuntu_icon}"'\[\033[00m\]  \[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
     # Afegeix el nou bloc de PS1 a ~/.bashrc.
     # S'usa 'printf ... %s' per a preservar les barres invertides literals (\033,
