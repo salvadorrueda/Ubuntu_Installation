@@ -52,6 +52,33 @@ El script:
 3. Instal·la el paquet amb `apt-get` (que gestiona automàticament les dependències).
 4. Elimina el fitxer `.deb` temporal un cop finalitzada la instal·lació.
 
+## Personalitzar el prompt del terminal amb la icona d'Ubuntu
+
+El script [setup_ps1_ubuntu.sh](./setup_ps1_ubuntu.sh) personalitza la variable `$PS1` del terminal substituint el símbol `@` de `usuari@host` per la icona d'Ubuntu (``, U+F31B de Nerd Fonts).
+
+Per a que la icona es vegi correctament cal una font Nerd Font; el script instal·la **JetBrainsMono Nerd Font** automàticament per a l'usuari actual.
+
+Ús:
+
+```bash
+./setup_ps1_ubuntu.sh
+```
+
+No requereix permisos de root.
+
+El script:
+1. Descarrega i instal·la JetBrainsMono Nerd Font a `~/.local/share/fonts/NerdFonts/`.
+2. Afegeix la PS1 personalitzada a `~/.bashrc`, preservant la configuració existent.
+3. Si el script s'executa de nou, substitueix el bloc anterior sense duplicar-lo.
+
+Quan el script acabi, aplica els canvis a la sessió actual amb:
+
+```bash
+source ~/.bashrc
+```
+
+**IMPORTANT:** Per veure la icona d'Ubuntu correctament, cal configurar el terminal perquè faci servir la font `JetBrainsMono Nerd Font`. A GNOME Terminal: **Edita → Preferències → Perfil → Text → Font personalitzada**.
+
 ## Instal·lar Visual Studio Code
 
 El script [install_vscode.sh](./install_vscode.sh) instal·la Visual Studio Code afegint el repositori oficial de Microsoft i instal·lant el paquet `code` via apt.
