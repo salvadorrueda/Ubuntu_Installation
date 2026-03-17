@@ -36,6 +36,22 @@ El script:
 
 Quan el script acabi, reinicia la màquina virtual amb `sudo reboot` perquè els canvis tinguin efecte.
 
+## Instal·lar Google Chrome
+
+El script [install_chrome.sh](./install_chrome.sh) instal·la Google Chrome descarregant el paquet `.deb` oficial de Google i instal·lant-lo via apt.
+
+Ús:
+
+```bash
+sudo ./install_chrome.sh
+```
+
+El script:
+1. Instal·la les dependències necessàries (`ca-certificates`).
+2. Descarrega el paquet `google-chrome-stable_current_amd64.deb` directament des dels servidors de Google.
+3. Instal·la el paquet amb `apt-get` (que gestiona automàticament les dependències).
+4. Elimina el fitxer `.deb` temporal un cop finalitzada la instal·lació.
+
 ## Instal·lar Visual Studio Code
 
 El script [install_vscode.sh](./install_vscode.sh) instal·la Visual Studio Code afegint el repositori oficial de Microsoft i instal·lant el paquet `code` via apt.
