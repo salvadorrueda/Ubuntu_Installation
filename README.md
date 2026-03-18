@@ -94,3 +94,28 @@ El script:
 2. Afegeix la clau GPG de Microsoft a `/etc/apt/keyrings/packages.microsoft.gpg`.
 3. Afegeix el repositori oficial de VS Code a `/etc/apt/sources.list.d/vscode.list`.
 4. Actualitza la llista de paquets i instal·la `code`.
+
+## Instal·lar Docker Engine
+
+El script [install_docker.sh](./install_docker.sh) instal·la Docker Engine a Ubuntu seguint la documentació oficial de Docker per Ubuntu:
+[https://docs.docker.com/engine/install/ubuntu/](https://docs.docker.com/engine/install/ubuntu/)
+
+Ús:
+
+```bash
+sudo ./install_docker.sh
+```
+
+Opcionalment, per ometre la prova final amb la imatge `hello-world`:
+
+```bash
+sudo ./install_docker.sh --skip-hello-world
+```
+
+El script:
+1. Instal·la les dependències requerides (`ca-certificates`, `curl`).
+2. Elimina paquets conflictius antics (`docker.io`, `podman-docker`, `containerd`, `runc`, etc.).
+3. Configura la clau GPG oficial de Docker a `/etc/apt/keyrings/docker.asc`.
+4. Afegeix el repositori oficial de Docker a `/etc/apt/sources.list.d/docker.sources`.
+5. Instal·la els paquets oficials: `docker-ce`, `docker-ce-cli`, `containerd.io`, `docker-buildx-plugin` i `docker-compose-plugin`.
+6. Verifica que el servei Docker estigui actiu i, per defecte, executa `docker run hello-world`.
