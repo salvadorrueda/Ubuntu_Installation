@@ -119,3 +119,19 @@ El script:
 4. Afegeix el repositori oficial de Docker a `/etc/apt/sources.list.d/docker.sources`.
 5. Instal·la els paquets oficials: `docker-ce`, `docker-ce-cli`, `containerd.io`, `docker-buildx-plugin` i `docker-compose-plugin`.
 6. Verifica que el servei Docker estigui actiu i, per defecte, executa `docker run hello-world`.
+
+## Instal·lar Antigravity de Google
+
+El script [install_antigravity.sh](./install_antigravity.sh) instal·la Antigravity en Ubuntu afegint el repositori oficial, important la clau GPG i instal·lant el paquet `antigravity` via apt.
+
+Ús:
+
+```bash
+sudo ./install_antigravity.sh
+```
+
+El script:
+1. Crea el directori de claus `/etc/apt/keyrings` si no existeix.
+2. Descarrega la clau de signatura del repositori i la desa com `/etc/apt/keyrings/antigravity-repo-key.gpg`.
+3. Afegeix el repositori d'Antigravity a `/etc/apt/sources.list.d/antigravity.list`.
+4. Actualitza la llista de paquets i instal·la `antigravity`.
