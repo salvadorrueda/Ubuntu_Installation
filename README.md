@@ -120,6 +120,30 @@ El script:
 5. Instal·la els paquets oficials: `docker-ce`, `docker-ce-cli`, `containerd.io`, `docker-buildx-plugin` i `docker-compose-plugin`.
 6. Verifica que el servei Docker estigui actiu i, per defecte, executa `docker run hello-world`.
 
+## Instal·lar Arduino IDE
+
+El script [install_arduino_ide.sh](./install_arduino_ide.sh) instal·la Arduino IDE 2 descarregant automàticament la versió més recent des de GitHub Releases i instal·lant-la via apt.
+
+Ús:
+
+```bash
+sudo ./install_arduino_ide.sh
+```
+
+Opcionalment, per ometre l'addició de l'usuari al grup `dialout`:
+
+```bash
+sudo ./install_arduino_ide.sh --skip-dialout
+```
+
+El script:
+1. Consulta la versió més recent d'Arduino IDE via l'API de GitHub.
+2. Descarrega el paquet `.deb` oficial per a Linux 64-bit.
+3. Instal·la el paquet amb `apt-get` (que gestiona automàticament les dependències).
+4. Afegeix l'usuari actual al grup `dialout` per permetre l'accés al port sèrie (necessari per programar plaques Arduino).
+
+Tanca la sessió i torna a entrar perquè el canvi de grup `dialout` tingui efecte.
+
 ## Instal·lar Antigravity de Google
 
 El script [install_antigravity.sh](./install_antigravity.sh) instal·la Antigravity en Ubuntu afegint el repositori oficial, important la clau GPG i instal·lant el paquet `antigravity` via apt.
