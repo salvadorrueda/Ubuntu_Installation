@@ -35,7 +35,7 @@ require_commands() {
 }
 
 get_latest_version() {
-    echo "Obtenint la versió més recent d'Arduino IDE..."
+    echo "Obtenint la versió més recent d'Arduino IDE..." >&2
     local version
     version=$(curl -fsSL "${GITHUB_API_URL}" \
         | grep '"tag_name"' \
@@ -47,6 +47,7 @@ get_latest_version() {
     fi
 
     echo "${version}"
+
 }
 
 download_arduino_ide() {
