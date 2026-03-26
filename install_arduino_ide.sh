@@ -3,6 +3,9 @@
 set -euo pipefail
 
 GITHUB_API_URL="https://api.github.com/repos/arduino/arduino-ide/releases/latest"
+INSTALL_DIR="/opt/arduino-ide"
+BIN_LINK="/usr/local/bin/arduino-ide"
+DESKTOP_FILE="/usr/share/applications/arduino-ide.desktop"
 
 usage() {
     cat <<'EOF'
@@ -10,7 +13,7 @@ usage() {
   sudo ./install_arduino_ide.sh [--skip-dialout]
 
 Aquest script instal·la Arduino IDE 2 en Ubuntu Desktop descarregant el
-paquet .deb oficial des de GitHub Releases i instal·lant-lo via apt.
+paquet zip oficial des de GitHub Releases i instal·lant-lo a /opt/arduino-ide.
 
 Opcions:
   --skip-dialout   Omet l'addició de l'usuari al grup 'dialout' (accés al port sèrie).
@@ -26,7 +29,7 @@ require_root() {
 
 require_commands() {
     local command
-    for command in curl apt-get; do
+    for command in curl unzip; do
         if ! command -v "$command" >/dev/null 2>&1; then
             echo "Falta el comandament requerit: $command" >&2
             exit 1
@@ -52,18 +55,49 @@ get_latest_version() {
 
 download_arduino_ide() {
     local version="$1"
-    local tmp_deb="$2"
-    local url="https://github.com/arduino/arduino-ide/releases/download/${version}/arduino-ide_${version}_Linux_64bit.deb"
+    local tmp_zip="$2"
+    local url="https://github.com/arduino/arduino-ide/releases/download/${version}/arduino-ide_${version}_Linux_64bit.zip"
 
     echo "Descarregant Arduino IDE ${version}..."
-    curl -fsSL --progress-bar -o "${tmp_deb}" "${url}"
+    curl -fsSL --progress-bar -o "${tmp_zip}" "${url}"
 }
 
 install_arduino_ide() {
-    local tmp_deb="$1"
+    local tmp_zip="$1"
+    local version="$2"
 
-    echo "Instal·lant Arduino IDE..."
-    apt-get install -y "${tmp_deb}"
+    [[ -n "${INSTALL_DIR}" ]] || { echo "INSTALL_DIR no està definit." >&2; exit 1; }
+
+    echo "Instal·lant Arduino IDE a ${INSTALL_DIR}..."
+    rm -rf "${INSTALL_DIR}"
+    mkdir -p "${INSTALL_DIR}"
+    unzip -q "${tmp_zip}" -d "${INSTALL_DIR}"
+
+    if [[ ! -f "${INSTALL_DIR}/arduino-ide" ]]; then
+        echo "No s'ha trobat l'executable arduino-ide a ${INSTALL_DIR}." >&2
+        exit 1
+    fi
+
+    chmod +x "${INSTALL_DIR}/arduino-ide"
+
+    ln -sf "${INSTALL_DIR}/arduino-ide" "${BIN_LINK}"
+
+    local icon
+    icon="$(find "${INSTALL_DIR}" -name "512x512.png" -type f 2>/dev/null | head -1)"
+
+    cat > "${DESKTOP_FILE}" <<EOF
+[Desktop Entry]
+Type=Application
+Name=Arduino IDE
+Comment=Arduino IDE ${version}
+Exec=${INSTALL_DIR}/arduino-ide
+Icon=${icon}
+Terminal=false
+Categories=Development;Electronics;
+MimeType=text/x-arduino;
+EOF
+
+    update-desktop-database /usr/share/applications 2>/dev/null || true
 }
 
 add_user_to_dialout() {
@@ -105,9 +139,9 @@ main() {
         esac
     done
 
-    local tmp_deb
-    tmp_deb="$(mktemp --suffix=-arduino-ide.deb)"
-    trap 'rm -f "${tmp_deb}"' EXIT
+    local tmp_zip
+    tmp_zip="$(mktemp --suffix=-arduino-ide.zip)"
+    trap 'rm -f "${tmp_zip}"' EXIT
 
     require_root
     require_commands
@@ -115,8 +149,8 @@ main() {
     local version
     version="$(get_latest_version)"
 
-    download_arduino_ide "${version}" "${tmp_deb}"
-    install_arduino_ide "${tmp_deb}"
+    download_arduino_ide "${version}" "${tmp_zip}"
+    install_arduino_ide "${tmp_zip}" "${version}"
 
     if [[ "${skip_dialout}" == "false" ]]; then
         add_user_to_dialout
