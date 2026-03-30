@@ -56,6 +56,13 @@ set_vm_memory() {
     VBoxManage modifyvm "${VM_NAME}" --memory "${ram_mb}"
 }
 
+create_snapshot() {
+    local timestamp
+    timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
+    echo "Creant la snapshot '${timestamp}' per a la màquina '${VM_NAME}'..."
+    VBoxManage snapshot "${VM_NAME}" take "${timestamp}" --description "Snapshot automàtica abans d'iniciar"
+}
+
 start_vm() {
     local headless="${1}"
     if [[ "${headless}" == "true" ]]; then
@@ -96,6 +103,7 @@ main() {
     echo "RAM total detectada: $(( half_ram_mb * 2 )) MB → assignant ${half_ram_mb} MB a '${VM_NAME}'."
 
     set_vm_memory "${half_ram_mb}"
+    create_snapshot
     start_vm "${headless}"
 
     echo "Màquina virtual '${VM_NAME}' iniciada correctament."
